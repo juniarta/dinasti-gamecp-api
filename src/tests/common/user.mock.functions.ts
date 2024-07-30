@@ -36,7 +36,7 @@ export function createUsers(length: number): UserEntity[] {
       id: faker.string.alphanumeric({ length: 12 }),
       ...getSignUpData(),
       phone: null,
-      roles: ['customer'],
+      roles: ['member'],
       createdAt: faker.date.anytime(),
       updatedAt: faker.date.anytime(),
     };
