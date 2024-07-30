@@ -21,12 +21,15 @@ model User {
 
 model UserRole {
   id     String @id @default(uuid())
-  role   Roles  @unique
+  role   Roles 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Roles {
+  superadmin
   admin
-  customer
+  pecalang
+  member
+  business
 }

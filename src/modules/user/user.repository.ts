@@ -65,7 +65,7 @@ export class UserRepository {
     const user = await this.prisma.user.create({
       data: {
         ...data,
-        roles: { create: [{ role: Roles.customer }] },
+        roles: { create: [{ role: Roles.member }] },
       },
       include: { roles: { select: { role: true } } },
     });

@@ -95,7 +95,7 @@ async function bootstrap(): Promise<{ port: number }> {
      */
     app.use(
       ['/docs'],
-      basicAuth({
+      basicAuth.default({
         challenge: true,
         users: {
           admin: swaggerConfig.password,
