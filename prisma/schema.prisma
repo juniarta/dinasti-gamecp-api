@@ -3,33 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String     @id @default(uuid())
-  email     String     @unique
-  phone     String?
-  firstName String?
-  lastName  String?
-  password  String
-  roles     UserRole[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now())
-}
-
-model UserRole {
-  id     String @id @default(uuid())
-  role   Roles 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-enum Roles {
-  superadmin
-  admin
-  pecalang
-  member
-  business
-}
