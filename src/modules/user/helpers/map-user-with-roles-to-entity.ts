@@ -1,4 +1,4 @@
-import { UserWithRoles } from './../types/user.types';
+import { UserWithRoles } from '../types/user.types';
 import UserEntity from '../entities/user.entity';
 
 export const mapUserWithRolesToEntity = (
