@@ -1,591 +1,11 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
-  schemas  = ["BILLING", "RF_User", "RF_World"]
 }
-
-model tbl_CashList {
-  Serial Int    @id(map: "PK_tbl_CashList") @default(autoincrement())
-  ItemID String @db.VarChar(8)
-  Server String @db.VarChar(21)
-  Price  Float  @default(0, map: "DF_tbl_CashList_Price")
-
-  @@schema("BILLING")
-}
-
-model tbl_CashLog {
-  Serial       Int      @id(map: "PK_tbl_CashLog") @default(autoincrement())
-  Account      Bytes    @db.Binary(17)
-  CharName     String   @db.VarChar(21)
-  ItemID       String   @db.VarChar(8)
-  Amount       Int      @default(0, map: "DF_tbl_CashLog_Amount")
-  Server       String   @db.VarChar(21)
-  ItemUID      String   @db.VarChar(24)
-  PricePerItem Float    @default(0, map: "DF_tbl_CashLog_PricePerItem")
-  TotalPrice   Float    @default(0, map: "DF_tbl_CashLog_TotalPrice")
-  BuyTime      DateTime @default(now(), map: "DF_tbl_CashLog_BuyTime") @db.DateTime
-  Discount     Float    @default(0, map: "DF_tbl_CashLog_Discount")
-  Status       Int      @default(0, map: "DF_tbl_CashLog_Status")
-
-  @@schema("BILLING")
-}
-
-model tbl_PayLog {
-  Serial     Int      @id(map: "PK_tbl_PayLog") @default(autoincrement())
-  PayID      BigInt
-  UserID     Bytes    @db.Binary(13)
-  Price      Float    @default(0, map: "DF_tbl_PayLog_Price")
-  PremiHours Int      @default(0, map: "DF_tbl_PayLog_PremiHours")
-  Accept     Boolean  @default(false, map: "DF_tbl_PayLog_Accept")
-  PayTime    DateTime @default(now(), map: "DF_tbl_PayLog_PayTime") @db.DateTime
-  CheckSum   Bytes    @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_PayLog_CheckSum") @db.Binary(4)
-
-  @@schema("BILLING")
-}
-
-model tbl_UserStatus {
-  Serial      Int       @id(map: "PK_tbl_UserStatus") @default(autoincrement())
-  Id          Bytes     @db.Binary(13)
-  Status      Int       @default(0, map: "DF_tbl_UserStatus_Status")
-  DTStartPrem DateTime? @db.DateTime
-  DTEndPrem   DateTime? @db.DateTime
-  Cash        Float     @default(0, map: "DF_tbl_UserStatus_Cash")
-  PremiHours  Int       @default(0, map: "DF_tbl_UserStatus_PremiHours")
-  LogCashUse  Float     @default(0, map: "DF_tbl_UserStatus_LogCashUse")
-
-  @@schema("BILLING")
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RF_User //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-model tbl_block_ip {
-  nSerial    Int @id(map: "PK_tbl_block_ip") @default(autoincrement())
-  addr0      Int @db.TinyInt
-  addr1      Int @db.TinyInt
-  addr2      Int @db.TinyInt
-  addr3      Int @default(0, map: "DF_tbl_permit_ip_addr3") @db.TinyInt
-  addr4      Int @default(255, map: "DF_tbl_permit_ip_addr4") @db.TinyInt
-  addr2range Int @default(255, map: "DF_tbl_block_ip_addr2range") @db.TinyInt
-
-  @@schema("RF_User")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model tbl_bugtime_connect_in_pcbang {
-  nworldcode    Int
-  navatorserial Int?
-  account       String? @db.Char(17)
-
-  @@ignore
-  @@schema("RF_User")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model tbl_bugtime_connectpcbang {
-  f1 Int @db.TinyInt
-  f2 Int @db.TinyInt
-  f3 Int @db.TinyInt
-  f4 Int @db.TinyInt
-
-  @@ignore
-  @@schema("RF_User")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model tbl_connect_in_bugtime {
-  ip String @db.NVarChar(16)
-
-  @@ignore
-  @@schema("RF_User")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model tbl_connect_pcbang {
-  ip String @db.NVarChar(16)
-
-  @@ignore
-  @@schema("RF_User")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model tbl_connectpcbang_charserial {
-  nWorldCode    Int @db.TinyInt
-  nAvatorSerial Int
-
-  @@ignore
-  @@schema("RF_User")
-}
-
-model tbl_CristalBattle_Log {
-  ID                 Int      @id(map: "PK_tbl_CristalBattle_Log") @default(autoincrement())
-  DID                Int
-  SID                Int
-  Nth                Int      @db.TinyInt
-  MasterRace         Int      @db.TinyInt
-  MasterName         String   @db.VarChar(17)
-  MasterClass        String   @db.Char(4)
-  B_BossName         String   @db.VarChar(17)
-  C_BossName         String   @db.VarChar(17)
-  A_BossName         String   @db.VarChar(17)
-  MasterSubBossName1 String   @db.VarChar(17)
-  MasterSubBossName2 String   @db.VarChar(17)
-  MasterSubBossName3 String   @db.VarChar(17)
-  MasterSubBossName4 String   @db.VarChar(17)
-  MasterSubBossName5 String   @db.VarChar(17)
-  StartTime          DateTime @db.DateTime
-  GetTime            DateTime @default(now(), map: "DF_tbl_CristalBattle_Log_GetTime") @db.DateTime
-  ChaosHour          Int      @db.TinyInt
-  ChaosMin           Int      @db.TinyInt
-  ElapseHour         Int      @default(0, map: "DF_tbl_CristalBattle_Log_ElapseHour") @db.TinyInt
-  ElapseMin          Int      @default(0, map: "DF_tbl_CristalBattle_Log_ElapseMin") @db.TinyInt
-  ElapseSec          Int      @default(0, map: "DF_tbl_CristalBattle_Log_ElapseSec") @db.TinyInt
-  KeeperHitter       String   @default("*", map: "DF_tbl_cristalbattle_log_KeeperHitter") @db.VarChar(17)
-  ByAnimus           Int      @default(255, map: "DF_tbl_cristalbattle_log_ByAnimus") @db.TinyInt
-  DestroyRace        Int?     @default(255, map: "DF_tbl_cristalbattle_log_DestroyRace") @db.TinyInt
-
-  @@schema("RF_User")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model tbl_exp_connectip {
-  F1 Int @db.TinyInt
-  F2 Int @db.TinyInt
-  F3 Int @db.TinyInt
-  F4 Int @db.TinyInt
-
-  @@ignore
-  @@schema("RF_User")
-}
-
-model tbl_GMActLog {
-  ID             Int            @id(map: "PK_tbl_GMActLog") @default(autoincrement())
-  Account        String         @db.VarChar(17)
-  TID            Int
-  PID            Int            @default(0, map: "DF_tbl_GMActLog_PID")
-  ActDate        DateTime       @default(now(), map: "DF_tbl_GMActLog_ActDate") @db.DateTime
-  tbl_GMActParam tbl_GMActParam @relation(fields: [PID], references: [ID], onUpdate: NoAction, map: "FK_CID")
-  tbl_GMActType  tbl_GMActType  @relation(fields: [TID], references: [ID], onUpdate: NoAction, map: "FK_TID")
-
-  @@schema("RF_User")
-}
-
-model tbl_GMActParam {
-  ID           Int                         @id(map: "PK_tbl_GMActParam") @default(autoincrement())
-  Param1       Unsupported("sql_variant")?
-  Param2       Unsupported("sql_variant")?
-  Param3       Unsupported("sql_variant")?
-  Param4       Unsupported("sql_variant")?
-  Param5       Unsupported("sql_variant")?
-  Param6       Unsupported("sql_variant")?
-  Param7       Unsupported("sql_variant")?
-  Param8       Unsupported("sql_variant")?
-  Param9       Unsupported("sql_variant")?
-  tbl_GMActLog tbl_GMActLog[]
-
-  @@schema("RF_User")
-}
-
-model tbl_GMActType {
-  ID           Int            @id(map: "PK_tbl_GMActType")
-  bLog         Boolean
-  TypeName     String         @db.VarChar(50)
-  TypeNameKor  String         @db.VarChar(50)
-  tbl_GMActLog tbl_GMActLog[]
-
-  @@schema("RF_User")
-}
-
-model tbl_GMjobLog {
-  nSerial        Int      @id(map: "PK_tbl_GMjobLog") @default(autoincrement())
-  szGMID         String   @db.VarChar(18)
-  nKind          Int      @default(0, map: "DF_tbl_GMjobLog_nKind") @db.TinyInt
-  szAvatorName   String?  @db.VarChar(18)
-  nAvatorSerial  Int?
-  nAccountSerial Int?
-  szDetail       String   @db.VarChar(50)
-  dtDate         DateTime @default(now(), map: "DF_tbl_GMjobLog_dtDate") @db.DateTime
-
-  @@schema("RF_User")
-}
-
-model tbl_HolyQuest_Log {
-  serial     Int      @id(clustered: false, map: "PK_tbl_HolyQuest_Log") @default(autoincrement())
-  ServerName String   @db.VarChar(32)
-  race       Int      @db.TinyInt
-  CharName   String   @db.VarChar(17)
-  LogDate    DateTime @default(now(), map: "DF_tbl_HolyQuest_Log_LogDate") @db.DateTime
-  dstRace    Int      @db.TinyInt
-
-  @@schema("RF_User")
-}
-
-model tbl_HostAccount {
-  Account  String  @id(map: "PK_tbl_HostAccount") @db.VarChar(17)
-  Password String  @default("*", map: "DF_tbl_HostAccount_Password") @db.VarChar(17)
-  Serial   Int     @default(autoincrement())
-  Grade    Int     @default(0, map: "DF_tbl_HostAccount_Active") @db.TinyInt
-  Depart   String? @db.VarChar(24)
-  RealName String? @db.VarChar(12)
-  Grade1   Int     @default(0, map: "DF_tbl_HostAccount_UserNum") @db.TinyInt
-
-  @@schema("RF_User")
-}
-
-model tbl_iplist_pcbang {
-  IP1    Int @db.TinyInt
-  IP2    Int @db.TinyInt
-  IP3    Int @db.TinyInt
-  IP4    Int @db.TinyInt
-  lastip Int @db.TinyInt
-
-  @@id([IP1, IP2, IP3, IP4], map: "PK_iplist_pcbangt")
-  @@schema("RF_User")
-}
-
-model tbl_protocolaccesslog {
-  Idx           Int      @id(map: "PF_tbl_protocolaccesslog_Idx") @default(autoincrement())
-  ProtocolMsgID Int      @default(0, map: "DF_tbl_protocolaccesslog_ProtocolMsgID")
-  ProtocolID    Int      @default(0, map: "DF_tbl_protocolaccesslog_ProtocolID")
-  GMSerial      Int      @default(0, map: "DF_tbl_protocolaccesslog_GMSerial")
-  AccessDate    DateTime @default(now(), map: "DF_tbl_protocolaccesslog_AccessDate") @db.DateTime
-  ProtocolFld0  Bytes?   @db.Binary(128)
-  ProtocolFld1  Bytes?   @db.Binary(128)
-  ProtocolFld2  Bytes?   @db.Binary(128)
-  ProtocolFld3  Bytes?   @db.Binary(128)
-  ProtocolFld4  Bytes?   @db.Binary(128)
-  ProtocolFld5  Bytes?   @db.Binary(128)
-  ProtocolFld6  Bytes?   @db.Binary(128)
-  ProtocolFld7  Bytes?   @db.Binary(128)
-  ProtocolFld8  Bytes?   @db.Binary(128)
-  ProtocolFld9  Bytes?   @db.Binary(128)
-
-  @@schema("RF_User")
-}
-
-model tbl_protocolauthinfo {
-  Idx        Int     @id(map: "PF_tbl_protocolauthinfo_Idx") @default(autoincrement())
-  dck        Boolean @default(false, map: "DF_tbl_protocolauthinfo_dck")
-  P_MsgID    Int     @default(0, map: "DF_tbl_protocolauthinfo_P_MsgID")
-  P_ID       Int     @default(0, map: "DF_tbl_protocolauthinfo_P_ID")
-  P_AuthType Int     @default(0, map: "DF_tbl_protocolauthinfo_P_AuthType") @db.TinyInt
-  GMID       String  @default("*", map: "DF_tbl_protocolauthinfo_GMID") @db.VarChar(17)
-  GMSerial   Int     @default(0, map: "DF_tbl_protocolauthinfo_GMSerial")
-
-  @@schema("RF_User")
-}
-
-model tbl_protocolinfo {
-  Idx             Int       @id(map: "PF_tbl_protocolinfo_Idx") @default(autoincrement())
-  dck             Boolean   @default(false, map: "DF_tbl_protocolinfo_dck")
-  ProtocolMsgID   Int       @default(0, map: "DF_tbl_protocolinfo_ProtocolMsgID")
-  ProtocolID      Int       @default(0, map: "DF_tbl_protocolinfo_ProtocolID")
-  ProtocolName    String    @default("*", map: "DF_tbl_protocolinfo_ProtocolName") @db.VarChar(64)
-  ProtocolExplain String    @default("*", map: "DF_tbl_protocolinfo_ProtocolExplain") @db.VarChar(256)
-  ProtocolFldCnt  Int       @default(0, map: "DF_tbl_protocolinfo_ProtocolFldCnt") @db.TinyInt
-  UpdateDate      DateTime? @default(now(), map: "DF_tbl_protocolinfo_UpdateDate") @db.DateTime
-
-  @@schema("RF_User")
-}
-
-model tbl_rfaccount {
-  identifier  Int      @id(map: "PK_rfaccount_identifier") @default(autoincrement()) @db.Int()
-  id          Bytes    @db.Binary(13)
-  password    Bytes    @db.Binary(13)
-  accounttype Int?     @default(1, map: "DF_tbl_rfaccount_accounttype") @db.TinyInt
-  birthdate   DateTime @db.SmallDateTime
-  Email       String?  @db.NVarChar(50)
-
-  @@index([password], map: "IX_tbl_rfaccount")
-  @@schema("RF_User")
-}
-
-model tbl_RFTestAccount {
-  identifier Int   @id(map: "PK_RF_Test_Account") @default(autoincrement()) @db.Int()
-  id         Bytes @db.Binary(16)
-  password   Bytes @db.Binary(24)
-  BCodeTU    Int   @default(0, map: "DF_tbl_RFTestAccount") @db.TinyInt
-
-  @@index([password], map: "IX_RF_Test_Account")
-  @@schema("RF_User")
-}
-
-model tbl_ServerUser_Log {
-  serial       Int      @id(map: "PK_tbl_ServerUser_Log") @default(autoincrement())
-  dtDate       DateTime @db.DateTime
-  nAverageUser Int      @default(0, map: "DF_tbl_ServerUser_Log_nAverageUser")
-  nMaxUser     Int      @default(0, map: "DF_tbl_ServerUser_Log_nMaxUser")
-  ServerName   String   @db.VarChar(32)
-  nBellaUser   Int      @default(0, map: "DF_tbl_ServerUser_Log_nBellaUser")
-  nCoraUser    Int      @default(0, map: "DF_tbl_ServerUser_Log_nCoraUser")
-  nAccUser     Int      @default(0, map: "DF_tbl_ServerUser_Log_nAccUser")
-
-  @@schema("RF_User")
-}
-
-model tbl_StaffAccount {
-  Serial       Int      @id(map: "PK_tbl_StaffAccount") @default(autoincrement())
-  ID           Bytes    @unique(map: "IX_tbl_StaffAccount") @db.Binary(17)
-  PW           Bytes    @db.Binary(24)
-  Grade        Int      @default(1, map: "DF_tbl_StaffAccount_Grade") @db.TinyInt
-  Depart       String   @db.VarChar(32)
-  RealName     String   @db.VarChar(12)
-  LastConnIP   String   @default("0", map: "DF_tbl_StaffAccount_LastConnIP") @db.Char(16)
-  CreateDT     DateTime @default(now(), map: "DF_tbl_StaffAccount_CreateDT") @db.DateTime
-  LastLoginDT  DateTime @default(dbgenerated("0"), map: "DF_tbl_StaffAccount_LastLoginDT") @db.DateTime
-  LastLogoffDT DateTime @default(dbgenerated("0"), map: "DF_tbl_StaffAccount_LastLogoffDT") @db.DateTime
-  TotalLogMin  Int      @default(0, map: "DF_tbl_StaffAccount_TotalLogMin")
-  SubGrade     Int      @default(0, map: "DF_tbl_StaffAccount_SubGrade") @db.TinyInt
-  ExpireDT     DateTime @default(dbgenerated("dateadd(month,(1),getdate())"), map: "DF_tbl_StaffAccount_ExpireDT") @db.DateTime
-  ComClass     String   @default("??", map: "DF_tbl_StaffAccount_ComClass") @db.VarChar(12)
-  BirthDay     String   @default("(0)-(0))-(0", map: "DF_tbl_StaffAccount_BirthDay") @db.Char(10)
-
-  @@schema("RF_User")
-}
-
-model tbl_UserAccount {
-  identifier               Int      @id(map: "PK_tbl_rfuser_identifier") @default(autoincrement()) @db.Int()
-  serial                   Int      @unique(map: "IX_tbl_rfuser") @default(autoincrement())
-  id                       Bytes    @db.Binary(16)
-  createtime               DateTime @default(now(), map: "DF_tbl_rfuser_CreateTime") @db.DateTime
-  createip                 String   @default("0", map: "DF_tbl_rfuser_createip") @db.Char(16)
-  lastlogintime            DateTime @default(now(), map: "DF_tbl_rfuser_LastLogTime") @db.DateTime
-  lastlogofftime           DateTime @default(now(), map: "DF_tbl_rfuser_lastlogintime1") @db.DateTime
-  totallogmin              Int      @default(0, map: "DF_tbl_rfuser_TotalLogMin")
-  lastconnectip            String   @default("0", map: "DF_tbl_rfuser_lastconnectip") @db.Char(16)
-  pushclosetime            DateTime @default(now(), map: "DF_tbl_rfuser_pushclosetime") @db.DateTime
-  pusherip                 String   @default("0", map: "DF_tbl_rfuser_pusherip") @db.Char(16)
-  JoinCode                 Int      @default(0, map: "DF_tbl_rfuser_JoinCode")
-  LoginFailureCnt          Int      @default(0, map: "DF_tbl_useraccount_loginfailurecnt") @db.TinyInt
-  fire_on                  DateTime @default(now(), map: "DF_tbl_useraccount_fire_on") @db.SmallDateTime
-  fire_warning             DateTime @default(now(), map: "DF_tbl_useraccount_fire_warning") @db.SmallDateTime
-  uilock                   Int      @default(0, map: "DF_tbl_useraccount_uilock") @db.TinyInt
-  uilock_pw                Bytes    @default(dbgenerated("0"), map: "DF_tbl_useraccount_uilock_pw") @db.Binary(13)
-  uilock_failcnt           Int      @default(0, map: "DF_tbl_useraccount_uilock_failcnt") @db.TinyInt
-  uilock_update            DateTime @default(dbgenerated("0"), map: "DF_tbl_useraccount_uilock_update") @db.SmallDateTime
-  uilock_hintindex         Int      @default(0, map: "DF_tbl_useraccount_uilock_hintindex") @db.TinyInt
-  uilock_hintanswer        Bytes    @default(dbgenerated("0"), map: "DF_tbl_useraccount_uilock_hintanswer") @db.Binary(17)
-  uilock_find_pass_failcnt Int      @default(0, map: "DF_tbl_useraccount_uilock_find_pass_failcnt") @db.TinyInt
-
-  @@schema("RF_User")
-}
-
-model tbl_UserBan {
-  nAccountSerial Int      @id(map: "PK_tbl_UserBan")
-  dtStartDate    DateTime @default(now(), map: "DF_tbl_UserBan_dtStartDate") @db.DateTime
-  nPeriod        Int
-  nKind          Int      @default(0, map: "DF_tbl_UserBan_nKind") @db.TinyInt
-  szReason       String?  @db.VarChar(32)
-  GMReason       String   @default("*", map: "DF_tbl_userban_GMReason") @db.VarChar(32)
-  GMWriter       String   @default("*", map: "DF_tbl_userban_GMWriter") @db.VarChar(32)
-  reasontype     Int      @default(0, map: "DF_tbl_UserBan_reasontype") @db.TinyInt
-
-  @@schema("RF_User")
-}
-
-model tbl_UserBan_Log {
-  nSerial        Int      @id(map: "PK_tbl_UserBan_Log") @default(autoincrement())
-  nAccountSerial Int
-  dtStartdate    DateTime @default(now(), map: "DF_tbl_UserBan_Log_dtStartdate") @db.DateTime
-  nPeriod        Int
-  nKind          Int      @default(0, map: "DF_tbl_UserBan_Log_nKind") @db.TinyInt
-  szReason       String?  @db.VarChar(32)
-  GMReason       String   @default("*", map: "DF_tbl_userban_log_GMReason") @db.VarChar(32)
-  GMWriter       String   @default("*", map: "DF_tbl_userban_log_GMWriter") @db.VarChar(32)
-
-  @@schema("RF_User")
-}
-
-model tbl_UserCount_Log {
-  serial             Int      @id(map: "PK_tbl_UserCount_Log") @default(autoincrement())
-  dtDate             DateTime @db.DateTime
-  nAverageUser       Int      @default(0, map: "DF_tbl_Usercount_Log_nAverageUser")
-  nMaxUser           Int      @default(0, map: "DF_tbl_Usercount_Log_nMaxUser")
-  nMaxUserTestServer Int      @default(0, map: "DF_tbl_Usercount_Log_nMaxUserTestServer")
-
-  @@schema("RF_User")
-}
-
-model tbl_usercurrentstate {
-  serial Int @id(map: "PK_tbl_usercurrentstate")
-  state  Int @default(0, map: "DF_tbl_usercurrentstate_state") @db.TinyInt
-
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240731 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240731") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240731", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240731")
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240801 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240801") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240801", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240801")
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240802 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240802") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240802", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240802")
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240805 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240805") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240805", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240805")
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240806 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240806") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240806", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240806")
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240807 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240807") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240807", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240807")
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240808 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240808") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240808", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240808")
-  @@schema("RF_User")
-}
-
-model tbl_UserLogout_Log20240809 {
-  idx            Int      @id(clustered: false, map: "PK_tbl_UserLogout_Log20240809") @default(autoincrement())
-  nAccountSerial Int
-  nWorldCode     Int
-  dtLoginDate    DateTime @db.DateTime
-  dtLogoutDate   DateTime @db.DateTime
-  nBillingType   Int
-  nLevel         Int?
-  nAvatorSerial  Int?
-  Account        String?  @db.Char(17)
-  ip             String   @db.Char(16)
-
-  @@index([dtLogoutDate], map: "IX_tbl_UserLogout_Log_Logout20240809", clustered: true)
-  @@index([dtLoginDate], map: "IX_tbl_UserLogout_Log20240809")
-  @@schema("RF_User")
-}
-
-model tbl_UserPush_Log {
-  nAccountSerial Int      @default(0, map: "DF_tbl_UserPush_Log_AccountSerial")
-  dtDate         DateTime @default(now(), map: "DF_tbl_UserPush_Log_Date") @db.DateTime
-  PushIP         String   @default("0", map: "DF_tbl_UserPush_Log_PushIP1") @db.VarChar(16)
-  CloseIP        String   @default("0", map: "DF_tbl_UserPush_Log_CloseIP1") @db.VarChar(16)
-
-  @@id([nAccountSerial, dtDate], map: "PK_tbl_UserPush_Log")
-  @@schema("RF_User")
-}
-
-model tbl_WorldHistory_Log {
-  serverName String   @db.Char(12)
-  race       String   @db.Char(12)
-  avatorNum  Int      @default(0, map: "DF_tbl_WorldHistory_Log_avatorNum")
-  dalant     BigInt   @default(0, map: "DF_tbl_WorldHistory_Log_dalant")
-  gold       BigInt   @default(0, map: "DF_tbl_WorldHistory_Log_gold")
-  lv         Int
-  logDate    DateTime @default(now(), map: "DF_tbl_WorldHistory_Log_logDate") @db.DateTime
-  idx        Int      @id(map: "PK_tbl_WorldHistory_Log") @default(autoincrement())
-
-  @@schema("RF_User")
-}
-
-model tbl_WorldServer_List {
-  Serial              Int      @id(map: "PK_tbl_WorldServer_List")
-  Name                String   @db.VarChar(32)
-  State               Int
-  LastUpdate          DateTime @default(now(), map: "DF_tbl_WorldServer_List_LastUpdate") @db.DateTime
-  msrepl_tran_version String   @default(dbgenerated("newid()"), map: "DF__tbl_World__msrep__2E1BDC42") @db.UniqueIdentifier
-
-  @@schema("RF_User")
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RF_World //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model deleteitem {
@@ -595,7 +15,6 @@ model deleteitem {
   ucode    Int     @default(dbgenerated("0x0FFFFFFF"), map: "DF__deleteite__ucode__5244F976")
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_AccountTrunk {
@@ -1211,8 +630,6 @@ model tbl_AccountTrunk {
   T98           Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_account__T98__7165A382")
   S99           BigInt  @default(0, map: "DF__tbl_account__S99__7259C7BB")
   T99           Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_account__T99__734DEBF4")
-
-  @@schema("RF_World")
 }
 
 model tbl_AccountTrunk_Extend {
@@ -1459,8 +876,6 @@ model tbl_AccountTrunk_Extend {
   R39           Int     @default(dbgenerated("0xFF"), map: "DF_tbl_AccountTrunk_Extend_R39") @db.TinyInt
   S39           BigInt  @default(0, map: "DF_tbl_AccountTrunk_Extend_S39")
   T39           Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_AccountTrunk_Extend_T39")
-
-  @@schema("RF_World")
 }
 
 model tbl_AccountTrunkCharge {
@@ -1477,8 +892,6 @@ model tbl_AccountTrunkCharge {
   TakeDate      DateTime @default(dbgenerated("0"), map: "DF_tbl_AccountTrunkCharge_TakeDate") @db.DateTime
   S             BigInt   @default(0, map: "DF__tbl_accounttr__S__64CAC273")
   T             Int      @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_accounttr__T__65BEE6AC")
-
-  @@schema("RF_World")
 }
 
 model tbl_aminepersonal_inven {
@@ -1569,7 +982,6 @@ model tbl_aminepersonal_inven {
   N39          Int      @default(0, map: "DF_tbl_aminepersonal_inven_N39") @db.TinyInt
 
   @@id([serial, avatorserial], map: "PK_tbl_aminepersonal_inven")
-  @@schema("RF_World")
 }
 
 model tbl_animusdata {
@@ -1580,8 +992,6 @@ model tbl_animusdata {
   Data3  Float @default(0, map: "DF_tbl_animusdata_Data3")
   Data4  Float @default(0, map: "DF_tbl_animusdata_Data4")
   Data5  Float @default(0, map: "DF_tbl_animusdata_Data5")
-
-  @@schema("RF_World")
 }
 
 model tbl_animuslog {
@@ -1592,8 +1002,6 @@ model tbl_animuslog {
   OrgValue    Float
   ChangeValue Float
   LogDate     DateTime @default(now(), map: "DF_tbl_animuslog_LogDate") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_ATradeTaxRate {
@@ -1606,8 +1014,6 @@ model tbl_ATradeTaxRate {
   UpdateTime    DateTime @default(now(), map: "DF_tbl_ATradeTaxRate_UpdateTime") @db.DateTime
   Suggester     Int      @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_atrad__Sugge__566A9015")
   SuggesterName String   @default(".", map: "DF__tbl_atrad__Sugge__575EB44E") @db.NVarChar(32)
-
-  @@schema("RF_World")
 }
 
 model tbl_automine_inven {
@@ -1783,7 +1189,6 @@ model tbl_automine_inven {
   O_79          Int      @default(0, map: "DF_tbl_automine_inven_O_79") @db.TinyInt
 
   @@id([serial, dck, Race, CollisionType, GuildSerial], map: "PK_tbl_automine_inven")
-  @@schema("RF_World")
 }
 
 model tbl_base {
@@ -1843,16 +1248,12 @@ model tbl_base {
   PD0           Int      @default(0, map: "DF__tbl_base__PD0__7E78816F")
   PI1           Int      @default(-1, map: "DF__tbl_base__PI1__7F6CA5A8")
   PD1           Int      @default(0, map: "DF__tbl_base__PD1__0060C9E1")
-
-  @@schema("RF_World")
 }
 
 model tbl_battletournament {
   CharacterSerial Int    @id(map: "PK__tbl_battletournament")
   CharacterName   String @db.VarChar(17)
   BattleWinGrade  Int    @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_Buddy {
@@ -1908,8 +1309,6 @@ model tbl_Buddy {
   Serial48 Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_Buddy_Serial281_1")
   Serial49 Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_Buddy_Serial291_1")
   DCK      Boolean @default(false, map: "DF_tbl_Buddy_DCK")
-
-  @@schema("RF_World")
 }
 
 model tbl_Cash_LimSale {
@@ -1956,8 +1355,6 @@ model tbl_Cash_LimSale {
   Num18      Int @default(0, map: "DF_tbl_Cash_LimSale_Num18")
   Code_K19   Int @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_Cash_LimSale_Code_K19")
   Num19      Int @default(0, map: "DF_tbl_Cash_LimSale_Num19")
-
-  @@schema("RF_World")
 }
 
 model tbl_characterselect_log_201011 {
@@ -1970,7 +1367,6 @@ model tbl_characterselect_log_201011 {
 
   @@index([Account, LogDate], map: "IX_tbl_characterselect_log_201011_account_logdate")
   @@index([CharacName, LogDate], map: "IX_tbl_characterselect_log_201011_characname_logdate")
-  @@schema("RF_World")
 }
 
 model tbl_characterselect_log_202407 {
@@ -1983,7 +1379,6 @@ model tbl_characterselect_log_202407 {
 
   @@index([Account, LogDate], map: "IX_tbl_characterselect_log_202407_account_logdate")
   @@index([CharacName, LogDate], map: "IX_tbl_characterselect_log_202407_characname_logdate")
-  @@schema("RF_World")
 }
 
 model tbl_characterselect_log_202408 {
@@ -1996,7 +1391,6 @@ model tbl_characterselect_log_202408 {
 
   @@index([Account, LogDate], map: "IX_tbl_characterselect_log_202408_account_logdate")
   @@index([CharacName, LogDate], map: "IX_tbl_characterselect_log_202408_characname_logdate")
-  @@schema("RF_World")
 }
 
 model tbl_ClassLog_AfterInitClass {
@@ -2008,8 +1402,6 @@ model tbl_ClassLog_AfterInitClass {
   ClassInitCnt   Int
   LastClassGrade Int      @db.TinyInt
   LogDate        DateTime @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_CryMsg {
@@ -2024,16 +1416,12 @@ model tbl_CryMsg {
   CryMsg8  String @default("", map: "DF_tbl_CryMsg_CryMsg8") @db.VarChar(255)
   CryMsg9  String @default("", map: "DF_tbl_CryMsg_CryMsg9") @db.VarChar(255)
   CryMsg10 String @default("", map: "DF_tbl_CryMsg_CryMsg10") @db.VarChar(255)
-
-  @@schema("RF_World")
 }
 
 model tbl_dormantaccount {
   AccountSerial Int     @id(map: "PK_tbl_dormantaccount")
   Account       String? @db.VarChar(17)
   LastConnTime  Int?
-
-  @@schema("RF_World")
 }
 
 model tbl_economy_history {
@@ -2064,8 +1452,6 @@ model tbl_economy_history {
   A_CutOre1   Float?   @default(0, map: "DF_tbl_economy_history_A_CutOre1_1")
   A_CutOre2   Float?   @default(0, map: "DF_tbl_economy_history_A_CutOre2_1")
   A_CutOre3   Float?   @default(0, map: "DF_tbl_economy_history_A_CutOre3_1")
-
-  @@schema("RF_World")
 }
 
 model tbl_event {
@@ -2075,7 +1461,6 @@ model tbl_event {
   ClassRefineDate Int @default(0, map: "DF__tbl_event_ClassRefineDate")
 
   @@id([serial, AvatorSerial], map: "PK_tbl_event")
-  @@schema("RF_World")
 }
 
 model tbl_EventPoint {
@@ -2083,8 +1468,6 @@ model tbl_EventPoint {
   DCK           Boolean @default(false, map: "DF_tbl_EventPoint_DCK")
   Account       String  @db.VarChar(17)
   Point         Int     @default(0, map: "DF_tbl_EventPoint_Point")
-
-  @@schema("RF_World")
 }
 
 model tbl_general {
@@ -2453,8 +1836,6 @@ model tbl_general {
   FS99                 BigInt   @default(0, map: "DF__tbl_genera__FS99__61EE55C8")
   MaxLevel             Int      @default(0, map: "DF__tbl_gener__MaxLe__75D7B4E9")
   GuildStatus          Int      @default(0, map: "DF_tbl_general_GuildStatus") @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_GoldBoxItem {
@@ -2867,16 +2248,12 @@ model tbl_GoldBoxItem {
   N2_98         Int @default(0, map: "DF_tbl_GoldBoxItem_N2_98")
   K2_99         Int @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_GoldBoxItem_K2_99")
   N2_99         Int @default(0, map: "DF_tbl_GoldBoxItem_N2_99")
-
-  @@schema("RF_World")
 }
 
 model tbl_GreetMsg {
   useType Int    @id(map: "Pk_tbl_GreetMsg") @db.TinyInt
   GMsg    String @db.VarChar(255)
   Name    String @default(" ", map: "DF__tbl_GreetMsg_Name") @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_Guild {
@@ -2897,8 +2274,6 @@ model tbl_Guild {
   GMsg              String   @default("", map: "DF_tbl_Guild_GMsg") @db.VarChar(255)
   deleteid          String   @default("*", map: "DF_deleteid") @db.VarChar(17)
   Point             BigInt   @default(0, map: "DF__tbl_Guild__Point__1526DC9D")
-
-  @@schema("RF_World")
 }
 
 model tbl_guild_skills {
@@ -2911,7 +2286,6 @@ model tbl_guild_skills {
   speed_lv     Int @default(0, map: "DF__tbl_guild__speed__1432B864") @db.TinyInt
 
   @@index([serial], map: "tbl_guild_skills_idx0")
-  @@schema("RF_World")
 }
 
 model tbl_GuildBattleRank {
@@ -2925,8 +2299,6 @@ model tbl_GuildBattleRank {
   totlose Int     @default(0, map: "DF_tbl_GuildRank_totloset")
   totdraw Int     @default(0, map: "DF_tbl_GuildRank_totdraw")
   totcnt  Int     @default(0, map: "DF_tbl_GuildRank_totcnt")
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -2942,7 +2314,6 @@ model tbl_GuildBattleRank20240805 {
   score  Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_guildbattleresullog {
@@ -2989,7 +2360,6 @@ model tbl_guildbattleresullog {
   blueguildbattlepvppoint Float?   @default(0, map: "DF_tbl_guildbattleresullog_blueguildbattlepvppoint")
 
   @@id([start, serial], map: "PK_tbl_guildbattleresullog_start_serial")
-  @@schema("RF_World")
 }
 
 model tbl_GuildBattleScheduleInfo {
@@ -2998,8 +2368,6 @@ model tbl_GuildBattleScheduleInfo {
   State      Int      @db.TinyInt
   StartTime  DateTime @db.DateTime
   BattleTurm Int      @db.SmallInt
-
-  @@schema("RF_World")
 }
 
 model tbl_GuildMoneyHistory_Log {
@@ -3012,8 +2380,6 @@ model tbl_GuildMoneyHistory_Log {
   LogDate      String  @db.Char(8)
   AvatorSerial Int
   AvatorName   String? @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3025,7 +2391,6 @@ model tbl_GuildRank20101116 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3037,7 +2402,6 @@ model tbl_GuildRank20240731 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3049,7 +2413,6 @@ model tbl_GuildRank20240801 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3061,7 +2424,6 @@ model tbl_GuildRank20240802 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3073,7 +2435,6 @@ model tbl_GuildRank20240803 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3085,7 +2446,6 @@ model tbl_GuildRank20240804 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3097,7 +2457,6 @@ model tbl_GuildRank20240805 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3109,7 +2468,6 @@ model tbl_GuildRank20240806 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3121,7 +2479,6 @@ model tbl_GuildRank20240807 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3133,7 +2490,6 @@ model tbl_GuildRank20240808 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3145,7 +2501,6 @@ model tbl_GuildRank20240809 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3157,7 +2512,6 @@ model tbl_GuildRank20240810 {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3169,7 +2523,6 @@ model tbl_GuildRankToday {
   Grade      Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_GuildRoom {
@@ -3180,8 +2533,6 @@ model tbl_GuildRoom {
   RoomRace     Int      @default(0, map: "DF_tbl_GuildRoom_RoomRace") @db.TinyInt
   RoomRentDate DateTime @default(dbgenerated("GetDate()"), map: "DF_tbl_GuildRoom_RoomRentDate") @db.DateTime
   LogDate      DateTime @default(dbgenerated("GetDate()"), map: "DF_tbl_GuildRoom_LogDate") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_0 {
@@ -3196,8 +2547,6 @@ model tbl_history_electraceboss_0 {
   tmOnVote      DateTime @default(now(), map: "DF_tbl_history_electraceboss_0_tmOnVote") @db.DateTime
   TotalVoteCnt  Int      @default(0, map: "DF_tbl_history_electraceboss_0_TotalVoteCnt")
   tmLastUpdate  DateTime @default(now(), map: "DF_tbl_history_electraceboss_0_tmLastUpdate") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_1 {
@@ -3212,8 +2561,6 @@ model tbl_history_electraceboss_1 {
   tmOnVote      DateTime @default(now(), map: "DF_tbl_history_electraceboss_1_tmOnVote") @db.DateTime
   TotalVoteCnt  Int      @default(0, map: "DF_tbl_history_electraceboss_1_TotalVoteCnt")
   tmLastUpdate  DateTime @default(now(), map: "DF_tbl_history_electraceboss_1_tmLastUpdate") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_2 {
@@ -3228,8 +2575,6 @@ model tbl_history_electraceboss_2 {
   tmOnVote      DateTime @default(now(), map: "DF_tbl_history_electraceboss_2_tmOnVote") @db.DateTime
   TotalVoteCnt  Int      @default(0, map: "DF_tbl_history_electraceboss_2_TotalVoteCnt")
   tmLastUpdate  DateTime @default(now(), map: "DF_tbl_history_electraceboss_2_tmLastUpdate") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_candidacy_0 {
@@ -3247,8 +2592,6 @@ model tbl_history_electraceboss_candidacy_0 {
   Rank         Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_0_Rank") @db.TinyInt
   Score        Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_0_Score")
   WinCnt       Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_0_WinCnt")
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_candidacy_1 {
@@ -3266,8 +2609,6 @@ model tbl_history_electraceboss_candidacy_1 {
   Rank         Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_1_Rank") @db.TinyInt
   Score        Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_1_Score")
   WinCnt       Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_1_WinCnt")
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_candidacy_2 {
@@ -3285,8 +2626,6 @@ model tbl_history_electraceboss_candidacy_2 {
   Rank         Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_2_Rank") @db.TinyInt
   Score        Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_2_Score")
   WinCnt       Int      @default(0, map: "DF_tbl_history_electraceboss_candidacy_2_WinCnt")
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_winner_0 {
@@ -3295,8 +2634,6 @@ model tbl_history_electraceboss_winner_0 {
   AvatorSerial Int
   AvatorName   String @db.VarChar(17)
   Rank         Int    @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_winner_1 {
@@ -3305,8 +2642,6 @@ model tbl_history_electraceboss_winner_1 {
   AvatorSerial Int
   AvatorName   String @db.VarChar(17)
   Rank         Int    @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_history_electraceboss_winner_2 {
@@ -3315,8 +2650,6 @@ model tbl_history_electraceboss_winner_2 {
   AvatorSerial Int
   AvatorName   String @db.VarChar(17)
   Rank         Int    @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_honor_guild {
@@ -3328,8 +2661,6 @@ model tbl_honor_guild {
   DCK         Int       @default(0, map: "DF__tbl_honor_g__DCK__3F7C6F8F") @db.TinyInt
   dtUpdate    DateTime  @default(now(), map: "DF__tbl_honor__dtUpd__407093C8") @db.DateTime
   dtDisable   DateTime? @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_inven {
@@ -3865,8 +3196,6 @@ model tbl_inven {
   T98      Int    @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_inven__T98__32A956FA")
   S99      BigInt @default(0, map: "DF__tbl_inven__S99__339D7B33")
   T99      Int    @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_inven__T99__34919F6C")
-
-  @@schema("RF_World")
 }
 
 model tbl_ItemCharge {
@@ -3882,8 +3211,6 @@ model tbl_ItemCharge {
   S             BigInt   @default(0, map: "DF__tbl_itemcharg__S__66B30AE5")
   T             Int      @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_itemcharg__T__67A72F1E")
   UID           BigInt   @default(0, map: "DF__tbl_ItemCha__UID__2280D7BB")
-
-  @@schema("RF_World")
 }
 
 model tbl_itemcombine_ex_result {
@@ -3969,8 +3296,6 @@ model tbl_itemcombine_ex_result {
   U23                 Int     @default(dbgenerated("0xFFFFFF"), map: "DF_tbl_itemcombine_ex_result_U23")
   resulteffecttype    Int     @default(0, map: "DF_tbl_itemcombine_ex_result_resulteffecttype")
   resulteffectmsgcode Int     @default(0, map: "DF_tbl_itemcombine_ex_resulteffectmsgcode")
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -3981,14 +3306,11 @@ model tbl_KillerList {
 
   @@index([PlayerSerial, When], map: "indx_load_list")
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_leaveaccountlist {
   serial Int    @id(map: "PK_tbl_leaveaccountlist")
   id     String @db.VarChar(16)
-
-  @@schema("RF_World")
 }
 
 model tbl_log_lv {
@@ -3997,8 +3319,6 @@ model tbl_log_lv {
   dtDate       DateTime @default(now(), map: "DF_tbl_log_lv_Date") @db.DateTime
   TotalMin     Int      @default(0, map: "DF_tbl_log_lv_TotalMin")
   Serial       Int      @id(map: "PK_tbl_log_lv") @default(autoincrement())
-
-  @@schema("RF_World")
 }
 
 model tbl_log_usernum {
@@ -4006,8 +3326,6 @@ model tbl_log_usernum {
   dtDate       DateTime @default(now(), map: "DF_tbl_UserNum_dtDate") @db.DateTime
   nAverageUser Int      @default(0, map: "DF_tbl_UserNum_nAverageUser")
   nMaxUser     Int      @default(0, map: "DF_tbl_UserNum_nMaxUser")
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -4037,7 +3355,6 @@ model tbl_Macro {
   spvalue Int    @default(0, map: "DF__tbl_Macro__spval__4050666D")
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_npc_quest_history {
@@ -4252,8 +3569,6 @@ model tbl_npc_quest_history {
   Code70  String @default("*", map: "DF_tbl_npc_quest_Code70") @db.VarChar(7)
   Level70 Int    @default(dbgenerated("0xFF"), map: "DF_tbl_npc_quest_Level70") @db.TinyInt
   Time70  BigInt @default(0, map: "DF_tbl_npc_quest_Time70")
-
-  @@schema("RF_World")
 }
 
 model tbl_NpcData {
@@ -4268,8 +3583,6 @@ model tbl_NpcData {
   Npc7   Int @default(0, map: "DF_tbl_NpcData_Npc7")
   Npc8   Int @default(0, map: "DF_tbl_NpcData_Npc8")
   Npc9   Int @default(0, map: "DF_tbl_NpcData_Npc9")
-
-  @@schema("RF_World")
 }
 
 model tbl_NpcLog {
@@ -4280,8 +3593,6 @@ model tbl_NpcLog {
   OrgValue    Int
   ChangeValue Int
   LogDate     DateTime @default(now(), map: "DF_tbl_NpcLog_LogDate") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_OreCutting {
@@ -4327,8 +3638,6 @@ model tbl_OreCutting {
   D18    Int     @default(0, map: "DF__tbl_OreCutting_D18")
   K19    Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_OreCutting_K19")
   D19    Int     @default(0, map: "DF__tbl_OreCutting_D19")
-
-  @@schema("RF_World")
 }
 
 model tbl_patriarch_candidate {
@@ -4349,8 +3658,6 @@ model tbl_patriarch_candidate {
   Score     Int      @default(0, map: "DF__tbl_patri__Score__23D4551A")
   Refund    Int      @default(0, map: "DF__tbl_patri__Refun__24C87953") @db.TinyInt
   dtUpScore DateTime @default(dbgenerated("1900-01-01"), map: "DF__tbl_patri__dtUpS__25BC9D8C") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_patriarch_comm {
@@ -4360,8 +3667,6 @@ model tbl_patriarch_comm {
   DepositDate  String   @db.Char(8)
   PayDate      DateTime @default(dbgenerated("1990-01-01"), map: "DF__tbl_patri__PayDa__7EA2D06B") @db.DateTime
   DCK          Int      @default(0, map: "DF__tbl_patriar__DCK__7F96F4A4") @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_patriarch_elect {
@@ -4380,8 +3685,6 @@ model tbl_patriarch_elect {
   HighGradeNum_1    Int      @default(0, map: "DF__tbl_patriarch_elect_HighGradeNum_1")
   HighGradeNum_2    Int      @default(0, map: "DF__tbl_patriarch_elect_HighGradeNum_2")
   VoteInfoResetTime Int      @default(1990011, map: "DF_tbl_patriarch_elect_VoteInfoResetTime")
-
-  @@schema("RF_World")
 }
 
 model tbl_pcbangitem {
@@ -4437,8 +3740,6 @@ model tbl_pcbangitem {
   K47    BigInt @default(-1, map: "DF_tbl_pcbangitem_k47")
   K48    BigInt @default(-1, map: "DF_tbl_pcbangitem_k48")
   K49    BigInt @default(-1, map: "DF_tbl_pcbangitem_k49")
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -4455,7 +3756,6 @@ model tbl_PostItemCharge {
   uid      BigInt  @default(0, map: "DF__tbl_PostIte__uid__36BCDA92")
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_PostRegistry {
@@ -4473,8 +3773,6 @@ model tbl_PostRegistry {
   sendrace   Int     @default(0, map: "DF__tbl_PostR__sendr__5EF1ED8C") @db.SmallInt
   userdgr    Int     @default(0, map: "DF__tbl_PostR__userd__5FE611C5") @db.SmallInt
   uid        BigInt  @default(0, map: "DF__tbl_PostReg__uid__3F10C48D")
-
-  @@schema("RF_World")
 }
 
 model tbl_PostStorage {
@@ -4494,8 +3792,6 @@ model tbl_PostStorage {
   err       Int     @default(0, map: "DF__tbl_PostSto__err__63B6A2A9") @db.TinyInt
   uid       BigInt  @default(0, map: "DF__tbl_PostSto__uid__4004E8C6")
   sindex    Int     @default(dbgenerated("0xFF"), map: "DF__tbl_PostS__sinde__74E390B0") @db.SmallInt
-
-  @@schema("RF_World")
 }
 
 model tbl_potion_delay {
@@ -4535,8 +3831,6 @@ model tbl_potion_delay {
   PD35   Int     @default(0, map: "DF_tbl_potion_delay_PD35")
   PD36   Int     @default(0, map: "DF__tbl_potion_delay_PD36")
   PD37   Int     @default(0, map: "DF__tbl_potion_delay_PD37")
-
-  @@schema("RF_World")
 }
 
 model tbl_PrimiumPlayTime {
@@ -4546,8 +3840,6 @@ model tbl_PrimiumPlayTime {
   ForcedClose   Boolean @default(false, map: "DF_tbl_PrimiumPlayTime_ForcedClose")
   ReceiveCoupon Int     @default(0, map: "DF_tbl_PrimiumPlayTime_ReceiveCoupon") @db.TinyInt
   EnsureTime    Int     @default(0, map: "DF_tbl_PrimiumPlayTime_EnsureTime") @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -4558,7 +3850,6 @@ model tbl_Punishment {
   LTime   Int @default(0, map: "DF__tbl_Punis__LTime__312E5038")
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_pvporderview {
@@ -4583,8 +3874,6 @@ model tbl_pvporderview {
   ContHaveCash  Int      @default(0, map: "DF_tbl_pvporderview_ContHaveCash") @db.TinyInt
   ContLoseCash  Int      @default(0, map: "DF_tbl_pvporderview_ContLoseCash") @db.TinyInt
   RaceWarRecvr  Boolean  @default(false, map: "DF_tbl_pvporderview_RaceWarRecvr")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20101116 {
@@ -4597,8 +3886,6 @@ model tbl_PvpPointGuildRank20101116 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20101116_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240731 {
@@ -4611,8 +3898,6 @@ model tbl_PvpPointGuildRank20240731 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240731_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240801 {
@@ -4625,8 +3910,6 @@ model tbl_PvpPointGuildRank20240801 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240801_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240802 {
@@ -4639,8 +3922,6 @@ model tbl_PvpPointGuildRank20240802 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240802_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240803 {
@@ -4653,8 +3934,6 @@ model tbl_PvpPointGuildRank20240803 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240803_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240804 {
@@ -4667,8 +3946,6 @@ model tbl_PvpPointGuildRank20240804 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240804_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240805 {
@@ -4681,8 +3958,6 @@ model tbl_PvpPointGuildRank20240805 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240805_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240806 {
@@ -4695,8 +3970,6 @@ model tbl_PvpPointGuildRank20240806 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240806_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240807 {
@@ -4709,8 +3982,6 @@ model tbl_PvpPointGuildRank20240807 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240807_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240808 {
@@ -4723,8 +3994,6 @@ model tbl_PvpPointGuildRank20240808 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240808_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240809 {
@@ -4737,8 +4006,6 @@ model tbl_PvpPointGuildRank20240809 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240809_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpPointGuildRank20240810 {
@@ -4751,8 +4018,6 @@ model tbl_PvpPointGuildRank20240810 {
   guildbattlepvppoint Float
   sumpvppoint         Float
   sumlv               Int?   @default(0, map: "DF_tbl_PvpPointGuildRank20240810_sumlv")
-
-  @@schema("RF_World")
 }
 
 model tbl_pvppointlimitinfo {
@@ -4764,8 +4029,6 @@ model tbl_pvppointlimitinfo {
   originalpoint Float    @default(0, map: "DF_tbl_pvppointlimitinfo_originalpoint")
   limitpoint    Float    @default(0, map: "DF_tbl_pvppointlimitinfo_limitpoint")
   usepoint      Float    @default(0, map: "DF_tbl_pvppointlimitinfo_usepoint")
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20101116 {
@@ -4779,8 +4042,6 @@ model tbl_PvpRank20101116 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240731 {
@@ -4794,8 +4055,6 @@ model tbl_PvpRank20240731 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240801 {
@@ -4809,8 +4068,6 @@ model tbl_PvpRank20240801 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240802 {
@@ -4824,8 +4081,6 @@ model tbl_PvpRank20240802 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240803 {
@@ -4839,8 +4094,6 @@ model tbl_PvpRank20240803 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240804 {
@@ -4854,8 +4107,6 @@ model tbl_PvpRank20240804 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240805 {
@@ -4869,8 +4120,6 @@ model tbl_PvpRank20240805 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240806 {
@@ -4884,8 +4133,6 @@ model tbl_PvpRank20240806 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240807 {
@@ -4899,8 +4146,6 @@ model tbl_PvpRank20240807 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240808 {
@@ -4914,8 +4159,6 @@ model tbl_PvpRank20240808 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240809 {
@@ -4929,8 +4172,6 @@ model tbl_PvpRank20240809 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_PvpRank20240810 {
@@ -4944,8 +4185,6 @@ model tbl_PvpRank20240810 {
   PvpPoint    Float
   GuildSerial Int
   GuildName   String @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -4962,7 +4201,6 @@ model tbl_PvpRankToday {
   GuildName   String @db.VarChar(17)
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_quest {
@@ -5148,8 +4386,6 @@ model tbl_quest {
   SecondAct29  Int     @default(dbgenerated("0xFFFF"), map: "DF_tbl_quest_SecondAct29") @db.SmallInt
   ThirdAct29   Int     @default(dbgenerated("0xFFFF"), map: "DF_tbl_quest_ThirdAct29") @db.SmallInt
   PassSec29    Int     @default(dbgenerated("0xFFFF"), map: "DF_tbl_quest_PassSec29")
-
-  @@schema("RF_World")
 }
 
 model tbl_racebattle_log {
@@ -5164,8 +4400,6 @@ model tbl_racebattle_log {
   bossserial0 Int      @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_raceb__bosss__398F5766")
   bossserial1 Int      @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_raceb__bosss__3A837B9F")
   bossserial2 Int      @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_raceb__bosss__3B779FD8")
-
-  @@schema("RF_World")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -5177,7 +4411,6 @@ model tbl_RemainOre_Log {
   totalAmount Int
 
   @@ignore
-  @@schema("RF_World")
 }
 
 model tbl_RenamePotion_Log {
@@ -5185,8 +4418,6 @@ model tbl_RenamePotion_Log {
   Serial  Int    @default(0, map: "DF_tbl_RenamePotion_Log_Serial")
   OldName String @default("*", map: "DF_tbl_RenamePotion_Log_OldName") @db.VarChar(17)
   NewName String @default("*", map: "DF_tbl_RenamePotion_Log_NewName") @db.VarChar(17)
-
-  @@schema("RF_World")
 }
 
 model tbl_ReservedGuildBattleInfo {
@@ -5195,8 +4426,6 @@ model tbl_ReservedGuildBattleInfo {
   P2GuildSerial Int
   MapID         Int
   Number        Int @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_settlementownerlog {
@@ -5213,14 +4442,11 @@ model tbl_settlementownerlog {
   guildmembersumlv Int
 
   @@id([owndate, nth, race, serial], map: "PK_tbl_settlementownerlog_serial")
-  @@schema("RF_World")
 }
 
 model tbl_sf_delay {
   aserial Int    @id(map: "PK_tbl_sf_delay")
   effect  Bytes? @db.Binary(130)
-
-  @@schema("RF_World")
 }
 
 model tbl_start_npc_quest_history {
@@ -5231,7 +4457,6 @@ model tbl_start_npc_quest_history {
   EndTime   BigInt   @default(0, map: "DF_tbl_start_npc_quest_history_EndTime")
 
   @@id([serial, code], map: "PK_tbl_start_npc_quest_history")
-  @@schema("RF_World")
 }
 
 model tbl_StoreLimitItem_061212 {
@@ -5273,8 +4498,6 @@ model tbl_StoreLimitItem_061212 {
   k15        Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_StoreLi__k15__75F619CC")
   num15      Int     @default(0, map: "DF__tbl_Store__num15__76EA3E05") @db.SmallInt
   resettime  BigInt  @default(0, map: "DF_tbl_StoreLimit_resettime")
-
-  @@schema("RF_World")
 }
 
 model tbl_supplement {
@@ -5297,8 +4520,6 @@ model tbl_supplement {
   ED6                Int     @default(0, map: "DF_tbl_supplement_ED6") @db.SmallInt
   ES6                BigInt  @default(0, map: "DF_tbl_supplement_ES6")
   ET6                Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_supplement_ET6")
-
-  @@schema("RF_World")
 }
 
 model tbl_TimeLimitInfo {
@@ -5306,8 +4527,6 @@ model tbl_TimeLimitInfo {
   TLStatus       Int    @default(0, map: "DF_tbl_TimeLimitInfo_TLStatus") @db.SmallInt
   Fatigue        Int    @default(0, map: "DF_tbl_TimeLimitInfo_Fatigue")
   LastLogoutTime BigInt @default(101010000, map: "DF_tbl_TimeLimitInfo_LastLoginTime")
-
-  @@schema("RF_World")
 }
 
 model tbl_unit {
@@ -5397,16 +4616,12 @@ model tbl_unit {
   KF_3   Int     @default(0, map: "DF_tbl_unit_KF_01_2")
   PF_3   Int     @default(0, map: "DF_tbl_unit_PF_01_2")
   Cut_3  Int     @default(0, map: "DF_tbl_unit_Cut_01_2")
-
-  @@schema("RF_World")
 }
 
 model tbl_unitdata {
   Serial Int   @id(map: "PK_tbl_unitdata")
   Data0  Float
   Data1  Float
-
-  @@schema("RF_World")
 }
 
 model tbl_unitlog {
@@ -5417,8 +4632,6 @@ model tbl_unitlog {
   OrgValue    Float
   ChangeValue Float
   LogDate     DateTime @default(now(), map: "DF_tbl_unitlog_LogDate") @db.DateTime
-
-  @@schema("RF_World")
 }
 
 model tbl_userinterface {
@@ -5505,8 +4718,6 @@ model tbl_userinterface {
   InvenBag3  Int     @default(0, map: "DF_tbl_userinterface_InvenBag3_1")
   InvenBag4  Int     @default(0, map: "DF_tbl_userinterface_InvenBag4_1")
   LBLock     Int     @default(0, map: "DF_tbl_userinterface_LBLock") @db.TinyInt
-
-  @@schema("RF_World")
 }
 
 model tbl_utgroupiteminfo {
@@ -5518,8 +4729,6 @@ model tbl_utgroupiteminfo {
   item4  Int
   item5  Int
   item6  Int
-
-  @@schema("RF_World")
 }
 
 model tbl_utresultinfo {
@@ -5531,14 +4740,11 @@ model tbl_utresultinfo {
   tax        Int
 
   @@id([type, serial, state], map: "PK_tbl_utresultinfo_type_serial")
-  @@schema("RF_World")
 }
 
 model tbl_utresultstateid {
   id   Int    @id(map: "tbl_utresultstateid_id")
   desc String @db.NVarChar(128)
-
-  @@schema("RF_World")
 }
 
 model tbl_utsellinfo {
@@ -5551,7 +4757,6 @@ model tbl_utsellinfo {
   sellturm Int      @db.TinyInt
 
   @@id([type, serial], map: "PK_tbl_utsellinfo_type_serial")
-  @@schema("RF_World")
 }
 
 model tbl_utsingleiteminfo {
@@ -5568,14 +4773,10 @@ model tbl_utsingleiteminfo {
   class3   Int     @db.TinyInt
   s        BigInt  @default(0, map: "DF__tbl_utsinglei__s__62E27A01")
   t        Int     @default(dbgenerated("0xFFFFFFFF"), map: "DF__tbl_utsinglei__t__63D69E3A")
-
-  @@schema("RF_World")
 }
 
 model tbl_WeeklyGuildPVPPointSum {
   serial              Int   @id(map: "PK_tbl_WeeklyGuildPVPPointSum_serial")
   killpvppoint        Float @default(0, map: "DF_tbl_WeeklyGuildPVPPointSum_killpvppoint")
   guildbattlepvppoint Float @default(0, map: "DF_tbl_WeeklyGuildPVPPointSum_guildbattlepvppoint")
-
-  @@schema("RF_World")
 }

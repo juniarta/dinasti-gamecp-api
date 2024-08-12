@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model tbl_CashList {
+  Serial Int    @id(map: "PK_tbl_CashList") @default(autoincrement())
+  ItemID String @db.VarChar(8)
+  Server String @db.VarChar(21)
+  Price  Float  @default(0, map: "DF_tbl_CashList_Price")
+}
+
+model tbl_CashLog {
+  Serial       Int      @id(map: "PK_tbl_CashLog") @default(autoincrement())
+  Account      Bytes    @db.Binary(17)
+  CharName     String   @db.VarChar(21)
+  ItemID       String   @db.VarChar(8)
+  Amount       Int      @default(0, map: "DF_tbl_CashLog_Amount")
+  Server       String   @db.VarChar(21)
+  ItemUID      String   @db.VarChar(24)
+  PricePerItem Float    @default(0, map: "DF_tbl_CashLog_PricePerItem")
+  TotalPrice   Float    @default(0, map: "DF_tbl_CashLog_TotalPrice")
+  BuyTime      DateTime @default(now(), map: "DF_tbl_CashLog_BuyTime") @db.DateTime
+  Discount     Float    @default(0, map: "DF_tbl_CashLog_Discount")
+  Status       Int      @default(0, map: "DF_tbl_CashLog_Status")
+}
+
+model tbl_PayLog {
+  Serial     Int      @id(map: "PK_tbl_PayLog") @default(autoincrement())
+  PayID      BigInt
+  UserID     Bytes    @db.Binary(13)
+  Price      Float    @default(0, map: "DF_tbl_PayLog_Price")
+  PremiHours Int      @default(0, map: "DF_tbl_PayLog_PremiHours")
+  Accept     Boolean  @default(false, map: "DF_tbl_PayLog_Accept")
+  PayTime    DateTime @default(now(), map: "DF_tbl_PayLog_PayTime") @db.DateTime
+  CheckSum   Bytes    @default(dbgenerated("0xFFFFFFFF"), map: "DF_tbl_PayLog_CheckSum") @db.Binary(4)
+}
+
+model tbl_UserStatus {
+  Serial      Int       @id(map: "PK_tbl_UserStatus") @default(autoincrement())
+  Id          Bytes     @db.Binary(13)
+  Status      Int       @default(0, map: "DF_tbl_UserStatus_Status")
+  DTStartPrem DateTime? @db.DateTime
+  DTEndPrem   DateTime? @db.DateTime
+  Cash        Float     @default(0, map: "DF_tbl_UserStatus_Cash")
+  PremiHours  Int       @default(0, map: "DF_tbl_UserStatus_PremiHours")
+  LogCashUse  Float     @default(0, map: "DF_tbl_UserStatus_LogCashUse")
+}
